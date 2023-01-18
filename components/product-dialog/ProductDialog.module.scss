@@ -1,0 +1,19 @@
+@import "../../styles/colors.scss";
+
+.details {
+  display: flex;
+  align-items: flex-end;
+  margin: 0.5rem;
+}
+
+.label {
+  color: $gray-font-color;
+  min-width: 120px;
+}
+
+.color {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}

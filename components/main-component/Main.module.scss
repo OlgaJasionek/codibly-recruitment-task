@@ -1,0 +1,10 @@
+@import "../../styles/colors.scss";
+
+.root {
+  margin: 50px;
+}
+
+.errorText {
+  margin-top: 30px;
+  color: $gray-font-color;
+}

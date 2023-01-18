@@ -1,0 +1,12 @@
+.row {
+  transition: filter 0.5s;
+}
+
+.row:hover {
+  filter: brightness(70%);
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+}

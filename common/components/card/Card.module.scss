@@ -1,0 +1,10 @@
+@import "../../../styles/colors.scss";
+
+.card {
+  padding: 20px;
+  background-color: white;
+  border: solid 1px $border-gray-color;
+  box-shadow: $box-shadow-color;
+  border-radius: 10px;
+  overflow: hidden;
+}
