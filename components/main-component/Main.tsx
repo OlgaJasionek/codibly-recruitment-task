@@ -43,7 +43,6 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
   useEffect(() => {
     if (!isFirstRun.current) {
       onChangeSearchValue();
-      console.log("filters changed", filters);
     }
   }, [filters]);
 
@@ -81,7 +80,7 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
 
   const onChangeSearchValue = () => {
     router.push({
-      query: { ...router.query, id: filters.id },
+      query: { ...router.query, id: filters.id, page: 1 },
     });
   };
 
@@ -105,7 +104,6 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
           <form>
             <SearchBar
               type='number'
-              loading={false}
               name='id'
               label='Search product by Id'
               control={control}

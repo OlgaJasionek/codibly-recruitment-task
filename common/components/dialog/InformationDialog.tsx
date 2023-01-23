@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ReactNode } from "react";
 
-import styles from "./Dialog.module.scss";
+import styles from "./InformationDialog.module.scss";
 
 type Props = {
   open: boolean;

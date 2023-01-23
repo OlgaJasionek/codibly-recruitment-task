@@ -1,6 +1,4 @@
-import { ColorLens } from "@mui/icons-material";
-
-import Dialog from "../../common/components/dialog/Dialog";
+import Dialog from "../../common/components/dialog/InformationDialog";
 import { Product } from "../types/product.type";
 
 import styles from "./ProductDialog.module.scss";
