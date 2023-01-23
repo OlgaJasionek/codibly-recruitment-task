@@ -26,8 +26,12 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
   const [openProductDialog, setOpenProductDialog] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
   const [totalRows, setTotalRows] = useState<number>(data.total);
-  const { control } = useForm<FiltersValue>();
+  const { control } = useForm<FiltersValue>({
+    defaultValues: { id: router.query.id as string },
+  });
   const filters = useWatch<FiltersValue>({ control });
+
+  console.log(router.query);
 
   // useEffect(() => {
   //   if (Object.keys(router.query).length > 0) {
@@ -39,13 +43,13 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
   //   }
   // }, [router.query]);
 
-  useEffect(() => {
-    if (filters.id) {
-      onChangeSearchValue(filters.id);
-    } else {
-      onChangeSearchValue("");
-    }
-  }, [filters.id]);
+  // useEffect(() => {
+  //   if (filters.id) {
+  //     onChangeSearchValue(filters.id);
+  //   } else {
+  //     onChangeSearchValue("");
+  //   }
+  // }, [filters.id]);
 
   const getData = async () => {
     try {

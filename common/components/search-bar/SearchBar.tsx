@@ -18,12 +18,12 @@ type Props = {
 
 const SearchBar = ({ loading, name, control, label, type }: Props) => {
   const {
-    field: { onChange },
+    field: { onChange, value },
   } = useController({
     name,
     control,
   });
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>(value);
 
   useEffect(() => {
     emitValue(inputValue);
