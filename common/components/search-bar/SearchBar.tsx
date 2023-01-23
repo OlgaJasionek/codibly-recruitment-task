@@ -5,7 +5,7 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Control, useController } from "react-hook-form";
 
 type Props = {
@@ -24,9 +24,14 @@ const SearchBar = ({ loading, name, control, label, type }: Props) => {
     control,
   });
   const [inputValue, setInputValue] = useState<string>(value);
+  const isInputValueEmit = useRef(false);
 
   useEffect(() => {
-    emitValue(inputValue);
+    if (isInputValueEmit.current) {
+      emitValue(inputValue);
+    } else {
+      isInputValueEmit.current = true;
+    }
   }, [inputValue]);
 
   const emitValue = useMemo(() => debounce(value => onChange(value), 500), []);

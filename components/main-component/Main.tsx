@@ -1,10 +1,12 @@
-import axios, { AxiosError } from "axios";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { GetDataResponse } from "../../common/api/api.service";
 
+import {
+  getData,
+  GetDataParams,
+  GetDataResponse,
+} from "../../common/api/api.service";
 import Card from "../../common/components/card/Card";
 import SearchBar from "../../common/components/search-bar/SearchBar";
 import Snackbar from "../../common/components/snackbar/Snackbar";
@@ -30,52 +32,37 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
     defaultValues: { id: router.query.id as string },
   });
   const filters = useWatch<FiltersValue>({ control });
+  const isFirstRun = useRef(true);
 
-  console.log(router.query);
+  useEffect(() => {
+    if (!isFirstRun.current) {
+      getProducts();
+    }
+  }, [router.query]);
 
-  // useEffect(() => {
-  //   if (Object.keys(router.query).length > 0) {
-  //     getData();
-  //   } else {
-  //     // router.replace({
-  //     //   query: { per_page: 5, page: 1, id: filters?.id },
-  //     // });
-  //   }
-  // }, [router.query]);
+  useEffect(() => {
+    if (!isFirstRun.current) {
+      onChangeSearchValue();
+      console.log("filters changed", filters);
+    }
+  }, [filters]);
 
-  // useEffect(() => {
-  //   if (filters.id) {
-  //     onChangeSearchValue(filters.id);
-  //   } else {
-  //     onChangeSearchValue("");
-  //   }
-  // }, [filters.id]);
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+  });
 
-  const getData = async () => {
+  const getProducts = async () => {
     try {
-      const resp = await axios.get<{
-        data: Product | Array<Product>;
-        total: number;
-      }>("https://reqres.in/api/products", {
-        params: {
-          page: router.query.page,
-          per_page: router.query.per_page,
-          id: router.query.id,
-        },
-      });
+      const resp = await getData(router.query as GetDataParams);
 
-      setProductsList(
-        Array.isArray(resp.data.data) ? resp.data.data : [resp.data.data]
-      );
-
-      setTotalRows(resp.data.total ? resp.data.total : 1);
+      setProductsList(resp.data);
+      setTotalRows(resp.total);
     } catch (err) {
-      if ((err as AxiosError).response?.status === 404) {
-        setProductsList([]);
-      } else {
-        setError("Unidentified error occured");
-        setOpenSnackbar(true);
-      }
+      setError(err as string);
+      setOpenSnackbar(true);
     }
   };
 
@@ -92,10 +79,10 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
     setOpenSnackbar(false);
   };
 
-  const onChangeSearchValue = (id: string) => {
-    // router.push({
-    //   query: { ...router.query, id },
-    // });
+  const onChangeSearchValue = () => {
+    router.push({
+      query: { ...router.query, id: filters.id },
+    });
   };
 
   const onChangePage = (page: number) => {
@@ -106,7 +93,7 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
 
   const onChangePerPage = (perPage: number) => {
     router.push({
-      query: { ...router.query, per_page: perPage },
+      query: { ...router.query, per_page: perPage, page: 1 },
     });
   };
 
