@@ -22,7 +22,6 @@ const SearchBar = ({ loading, name, control, label, type }: Props) => {
   } = useController({
     name,
     control,
-    defaultValue: "",
   });
   const [inputValue, setInputValue] = useState<string>("");
 

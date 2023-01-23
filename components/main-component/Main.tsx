@@ -1,7 +1,9 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { GetDataResponse } from "../../common/api/api.service";
 
 import Card from "../../common/components/card/Card";
 import SearchBar from "../../common/components/search-bar/SearchBar";
@@ -16,26 +18,26 @@ type FiltersValue = {
   id: string | undefined;
 };
 
-const MainComponent = () => {
+const MainComponent = ({ data }: { data: GetDataResponse }) => {
   const router = useRouter();
   const [error, setError] = useState<string | undefined>();
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [productsList, setProductsList] = useState<Product[]>([]);
+  const [productsList, setProductsList] = useState<Product[]>(data.data);
   const [openProductDialog, setOpenProductDialog] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
-  const [totalRows, setTotalRows] = useState<number>(0);
-  const { control } = useForm();
+  const [totalRows, setTotalRows] = useState<number>(data.total);
+  const { control } = useForm<FiltersValue>();
   const filters = useWatch<FiltersValue>({ control });
 
-  useEffect(() => {
-    if (Object.keys(router.query).length > 0) {
-      getData();
-    } else {
-      router.replace({
-        query: { per_page: 5, page: 1, id: filters?.id },
-      });
-    }
-  }, [router.query]);
+  // useEffect(() => {
+  //   if (Object.keys(router.query).length > 0) {
+  //     getData();
+  //   } else {
+  //     // router.replace({
+  //     //   query: { per_page: 5, page: 1, id: filters?.id },
+  //     // });
+  //   }
+  // }, [router.query]);
 
   useEffect(() => {
     if (filters.id) {
@@ -64,7 +66,7 @@ const MainComponent = () => {
 
       setTotalRows(resp.data.total ? resp.data.total : 1);
     } catch (err) {
-      if (err.response.status === 404) {
+      if ((err as AxiosError).response?.status === 404) {
         setProductsList([]);
       } else {
         setError("Unidentified error occured");
@@ -87,9 +89,9 @@ const MainComponent = () => {
   };
 
   const onChangeSearchValue = (id: string) => {
-    router.push({
-      query: { ...router.query, id },
-    });
+    // router.push({
+    //   query: { ...router.query, id },
+    // });
   };
 
   const onChangePage = (page: number) => {

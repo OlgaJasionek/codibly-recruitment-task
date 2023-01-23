@@ -1,8 +1,24 @@
+import { GetServerSideProps } from "next";
 import Head from "next/head";
+import {
+  getData,
+  GetDataParams,
+  GetDataResponse,
+} from "../common/api/api.service";
 
 import MainComponent from "../components/main-component/Main";
 
-const HomePage = () => {
+export const getServerSideProps: GetServerSideProps = async context => {
+  const data = await getData(context.query as GetDataParams);
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
+const HomePage = (props: { data: GetDataResponse }) => {
   return (
     <>
       <Head>
@@ -12,7 +28,7 @@ const HomePage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main>
-        <MainComponent />
+        <MainComponent data={props.data} />
       </main>
     </>
   );
