@@ -2,15 +2,15 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 
 import {
-  getData,
-  GetDataParams,
-  GetDataResponse,
+  getProducts,
+  GetProductsParams,
+  GetProductsResponse,
 } from "../common/api/api.service";
 
-import MainComponent from "../components/main-component/Main";
+import MainComponent from "../components/main/Main";
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const data = await getData(context.query as GetDataParams);
+  const data = await getProducts(context.query as GetProductsParams);
 
   return {
     props: {
@@ -19,12 +19,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-const HomePage = (props: { data: GetDataResponse }) => {
+const HomePage = (props: { data: GetProductsResponse }) => {
   return (
     <>
       <Head>
-        <title>Task to application</title>
-        <meta name='description' content='task to application' />
+        <title>Codibly Recruitment Task</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

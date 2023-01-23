@@ -12,23 +12,23 @@ import { Product } from "../types/product.type";
 import styles from "./ProductsListTable.module.scss";
 
 type Props = {
-  productsList: Product[];
+  products: Product[];
   page: number;
   perPage: number;
   totalRows: number;
-  onOpen: (product: Product) => void;
-  setPage: (value: number) => void;
-  setPerPage: (value: number) => void;
+  onOpenProductDialog: (product: Product) => void;
+  onChangePage: (value: number) => void;
+  onChangePerPage: (value: number) => void;
 };
 
 const ProductListTable = ({
-  productsList,
+  products,
   page,
   perPage,
   totalRows,
-  onOpen,
-  setPage,
-  setPerPage,
+  onOpenProductDialog,
+  onChangePage,
+  onChangePerPage,
 }: Props) => {
   return (
     <Table className={styles.table}>
@@ -40,11 +40,11 @@ const ProductListTable = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {productsList.map(product => (
+        {products.map(product => (
           <TableRow
             className={styles.row}
             key={product.id}
-            onClick={() => onOpen(product)}
+            onClick={() => onOpenProductDialog(product)}
             style={{ backgroundColor: product.color }}>
             <TableCell>{product.id}</TableCell>
             <TableCell>{product.name}</TableCell>
@@ -56,8 +56,8 @@ const ProductListTable = ({
         page={page - 1}
         perPage={perPage}
         totalRows={totalRows}
-        onPageChange={setPage}
-        onPerPageChange={setPerPage}
+        onPageChange={onChangePage}
+        onPerPageChange={onChangePerPage}
       />
     </Table>
   );

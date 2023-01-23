@@ -2,20 +2,20 @@ import axios, { AxiosError } from "axios";
 
 import { Product } from "../../components/types/product.type";
 
-export type GetDataParams = {
+export type GetProductsParams = {
   page: string;
   per_page: string;
   id?: string;
 };
 
-export type GetDataResponse = {
+export type GetProductsResponse = {
   data: Product[];
   total: number;
 };
 
-export const getData = async (
-  params: GetDataParams
-): Promise<GetDataResponse> => {
+export const getProducts = async (
+  params: GetProductsParams
+): Promise<GetProductsResponse> => {
   try {
     const resp = await axios.get<{
       data: Product | Array<Product>;

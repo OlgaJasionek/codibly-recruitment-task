@@ -18,7 +18,7 @@ const TablePagination = (props: Props) => {
   const { page, perPage, totalRows, onPageChange, onPerPageChange } = props;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     onPageChange(newPage);

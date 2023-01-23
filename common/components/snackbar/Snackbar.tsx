@@ -1,10 +1,9 @@
 import { Alert, AlertColor, Snackbar as MuiSnackbar } from "@mui/material";
-import ReactDOM from "react-dom";
 
 type Props = {
   open: boolean;
   handleClose: () => void;
-  text: string | null | undefined;
+  text: string;
   color: AlertColor;
 };
 

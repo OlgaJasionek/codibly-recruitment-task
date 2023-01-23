@@ -7,7 +7,7 @@ type Props = {
   name: string;
   label: string;
   type: string;
-  control: Control<any> | undefined;
+  control: Control<any>;
 };
 
 const SearchBar = ({ name, control, label, type }: Props) => {

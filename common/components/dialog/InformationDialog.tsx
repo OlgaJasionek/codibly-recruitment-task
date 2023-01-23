@@ -19,19 +19,17 @@ type Props = {
 
 const Dialog = ({ open, title, children, onClose }: Props) => {
   return (
-    <>
-      <MuiDialog open={open} fullWidth onClose={onClose}>
-        <div className={styles.header}>
-          <DialogTitle id='dialog-title'>{title}</DialogTitle>
-          <DialogActions>
-            <IconButton color='inherit' onClick={onClose}>
-              <Close />
-            </IconButton>
-          </DialogActions>
-        </div>
-        <DialogContent>{children}</DialogContent>
-      </MuiDialog>
-    </>
+    <MuiDialog open={open} fullWidth onClose={onClose}>
+      <div className={styles.header}>
+        <DialogTitle id='dialog-title'>{title}</DialogTitle>
+        <DialogActions>
+          <IconButton color='inherit' onClick={onClose}>
+            <Close />
+          </IconButton>
+        </DialogActions>
+      </div>
+      <DialogContent>{children}</DialogContent>
+    </MuiDialog>
   );
 };
 

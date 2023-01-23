@@ -6,14 +6,13 @@ import styles from "./ProductDialog.module.scss";
 type Props = {
   productDetails: Product | undefined;
   open: boolean;
-  title: string;
   onClose: () => void;
 };
 
-const ProductDialog = ({ open, title, productDetails, onClose }: Props) => {
+const ProductDialog = ({ open, productDetails, onClose }: Props) => {
   return (
     <>
-      <Dialog open={open} title={title} onClose={onClose}>
+      <Dialog open={open} title='Product details' onClose={onClose}>
         {productDetails ? (
           <div>
             <div className={styles.details}>
@@ -30,7 +29,7 @@ const ProductDialog = ({ open, title, productDetails, onClose }: Props) => {
               </div>
             </div>
             <div className={styles.details}>
-              <span className={styles.label}>ID </span>
+              <span className={styles.label}>ID</span>
               <strong>{productDetails.id}</strong>
             </div>
             <div className={styles.details}>
@@ -39,7 +38,7 @@ const ProductDialog = ({ open, title, productDetails, onClose }: Props) => {
             </div>
           </div>
         ) : (
-          <span>Błąd!!</span>
+          <span>No product.</span>
         )}
       </Dialog>
     </>

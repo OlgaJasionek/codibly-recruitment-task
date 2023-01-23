@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import {
-  getData,
-  GetDataParams,
-  GetDataResponse,
+  getProducts,
+  GetProductsParams,
+  GetProductsResponse,
 } from "../../common/api/api.service";
 import Card from "../../common/components/card/Card";
 import SearchBar from "../../common/components/search-bar/SearchBar";
@@ -20,11 +20,11 @@ type FiltersValue = {
   id: string | undefined;
 };
 
-const MainComponent = ({ data }: { data: GetDataResponse }) => {
+const MainComponent = ({ data }: { data: GetProductsResponse }) => {
   const router = useRouter();
-  const [error, setError] = useState<string | undefined>();
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [productsList, setProductsList] = useState<Product[]>(data.data);
+  const [error, setError] = useState<string>("");
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState<boolean>(false);
+  const [products, setProducts] = useState<Product[]>(data.data);
   const [openProductDialog, setOpenProductDialog] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
   const [totalRows, setTotalRows] = useState<number>(data.total);
@@ -36,7 +36,7 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
 
   useEffect(() => {
     if (!isFirstRun.current) {
-      getProducts();
+      getData();
     }
   }, [router.query]);
 
@@ -53,15 +53,15 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
     }
   });
 
-  const getProducts = async () => {
+  const getData = async () => {
     try {
-      const resp = await getData(router.query as GetDataParams);
+      const resp = await getProducts(router.query as GetProductsParams);
 
-      setProductsList(resp.data);
+      setProducts(resp.data);
       setTotalRows(resp.total);
     } catch (err) {
       setError(err as string);
-      setOpenSnackbar(true);
+      setOpenErrorSnackbar(true);
     }
   };
 
@@ -75,7 +75,7 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
   };
 
   const closeSnackbarHandler = () => {
-    setOpenSnackbar(false);
+    setOpenErrorSnackbar(false);
   };
 
   const onChangeSearchValue = () => {
@@ -84,13 +84,13 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
     });
   };
 
-  const onChangePage = (page: number) => {
+  const changePageHandler = (page: number) => {
     router.push({
       query: { ...router.query, page: page + 1 },
     });
   };
 
-  const onChangePerPage = (perPage: number) => {
+  const changePerPageHandler = (perPage: number) => {
     router.push({
       query: { ...router.query, per_page: perPage, page: 1 },
     });
@@ -109,15 +109,15 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
               control={control}
             />
           </form>
-          {productsList.length > 0 ? (
+          {products.length > 0 ? (
             <ProductListTable
-              productsList={productsList}
+              products={products}
               page={+(router.query.page as string) || 1}
               perPage={+(router.query.per_page as string) || 5}
               totalRows={totalRows}
-              onOpen={openProductDialogHandler}
-              setPage={onChangePage}
-              setPerPage={onChangePerPage}
+              onOpenProductDialog={openProductDialogHandler}
+              onChangePage={changePageHandler}
+              onChangePerPage={changePerPageHandler}
             />
           ) : (
             <p className={styles.errorText}>No results found</p>
@@ -127,11 +127,10 @@ const MainComponent = ({ data }: { data: GetDataResponse }) => {
       <ProductDialog
         productDetails={selectedProduct}
         open={openProductDialog}
-        title={"Details of product"}
         onClose={closeProductDialogHandler}
       />
       <Snackbar
-        open={openSnackbar}
+        open={openErrorSnackbar}
         handleClose={closeSnackbarHandler}
         text={error}
         color='error'
